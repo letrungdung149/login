@@ -19,11 +19,13 @@ Route::get('/', function () {
 });
 
 Route::prefix('backend')
+    ->middleware(['auth'])
     ->group(function() {
         Route::get('/dashboard', [DashboardController::class, 'home'])->name('dashboard');
-        Route::get('/login', [DashboardController::class, 'getLogin'])->name('getLogin');
-        Route::post('/login', [DashboardController::class, 'postLogin']);
-        Route::get('/logout', [DashboardController::class, 'getLogout'])->name('getLogout');;
+
     });
+Route::get('/login', [DashboardController::class, 'getLogin'])->name('login');
+Route::post('/login', [DashboardController::class, 'postLogin']);
+Route::get('/logout', [DashboardController::class, 'getLogout'])->name('getLogout');;
 
 
