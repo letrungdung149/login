@@ -72,7 +72,7 @@
             <div class="content d-flex justify-content-center align-items-center">
 
                 <!-- Login form -->
-                <form class="login-form" action="{{ route('getLogin') }}" method="post">
+                <form class="login-form" action="{{ route('login') }}" method="post">
                     {{ csrf_field() }}
                     @if (session('status'))
                         <p class="text-danger">Emai hoặc mật khẩu không chính xác!</p>
