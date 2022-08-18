@@ -33,6 +33,6 @@ class DashboardController
     public function getLogout()
     {
         Auth::logout();
-        return redirect()->route('getLogin');
+        return redirect()->route('login');
     }
 }
