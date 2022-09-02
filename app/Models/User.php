@@ -23,13 +23,14 @@ class User extends Authenticatable
         'password',
     ];
 
+    protected $guarded = [];
+
     /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
         'remember_token',
     ];
 
@@ -47,5 +48,9 @@ class User extends Authenticatable
             $query = $query->where('name','like','%'.$key.'%');
         }
         return $query;
+    }
+
+    public function roles(){
+        return $this->belongsToMany(Role::class,'roles_user');
     }
 }

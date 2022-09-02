@@ -11,9 +11,9 @@ class DashboardController
     }
     public function getLogin()
     {
-        if (Auth::check()) {
-            return redirect('backend/dashboard');
-        }
+//        if (Auth::check()) {
+//            return redirect('backend/dashboard');
+//        }
         return view('admin.login');
 
     }

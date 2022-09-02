@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,9 +23,11 @@ Route::get('/', function () {
 Route::prefix('backend')
     ->middleware(['auth'])
     ->group(function() {
-        Route::get('/dashboard', [DashboardController::class,'home'])->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class,'home'])->middleware('check:user-list');
         Route::resource('users', UserController::class);
+        Route::resource('roles', RoleController::class);
     });
+
 Route::get('/login', [DashboardController::class, 'getLogin'])->name('login');
 Route::post('/login', [DashboardController::class, 'postLogin']);
 Route::get('/logout', [DashboardController::class, 'getLogout'])->name('getLogout');;

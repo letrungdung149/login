@@ -33,12 +33,12 @@ class UserController
     public function destroy(User $user){
         return $user->delete();
     }
-//    public function delete($id){
-//        $user = User::findOrFail($id);
-//
-//        $user->delete();
-//        echo"success delete user";
-//    }
+    public function delete($id){
+        $user = User::findOrFail($id);
+
+        $user->delete();
+        echo"success delete user";
+    }
 
     function search($name)
     {

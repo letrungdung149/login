@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@push('css')
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+@endpush
 @section('content')
     <div class="content">
         <div class="card">
@@ -8,23 +11,13 @@
                     <div class="row">
                         <div class="col-sm-8">
                             <div class="dt-buttons btn-group flex-wrap">
-                                <a class="btn btn-success" href="{{ route('users.create') }}"> Create New Product</a>
+                                <a class="btn btn-success" data-toggle="modal" data-target="#addModal" href="#">
+                                    Create</a>
                             </div>
                         </div>
-                        <form action="" class="col-sm-4">
                             <div id="collections-table_filter" class="dataTables_filter"><label>Search:<input
-                                        type="search" class="form-control form-control-sm" placeholder="search" name="key"
+                                      ng-model="search"  type="search" class="form-control form-control-sm" placeholder="search"
                                         aria-controls="collections-table"></label></div>
-                        </form>
-                        <form method="GET">
-                            <select name="per_page">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                            </select>
-                            <input type="submit" name="submit" value="Submit">
-                        </form>
                     </div>
                     <div class="row">
                         <div id="collections-table_processing" class="dataTables_processing card"
@@ -54,32 +47,104 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($users as $user)
-                                <tr id="1" class="odd">
-                                    <td>{{ $user->name }}</td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>{{ $user->created_at }}</td>
+                                <tr dir-paginate="u in datas | itemsPerPage:pageSize | filter:search">
+                                    <td><% u.name %></td>
+                                    <td><% u.email %></td>
+                                    <td><% u.created_at %></td>
+                                    <td></td>
                                     <td class=" dt-center noVis">
-                                        <form action="{{ route('users.destroy',$user->id) }}" class="list-icons" method="post">
-                                            <a href="{{ route('users.edit',$user->id) }}"
-                                                                   class="list-icons-item text-primary editor-edit"><i
+                                        <form action="" class="list-icons" method="post">
+                                            <a href="#"
+                                               data-toggle="modal" data-target="#editModal"
+                                               ng-click="edit_user(u.id)"
+                                               class="list-icons-item text-primary editor-edit"><i
                                                     class="icon-pencil7"></i></a>
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="list-icons-item text-danger editor-delete">
+                                            <a type="submit" ng-click="remove_user(u.id)"
+                                               class="list-icons-item text-danger editor-delete">
                                                 <i
                                                     class="icon-trash">
                                                 </i>
-                                            </button>
+                                            </a>
                                         </form>
                                     </td>
                                 </tr>
-                                @endforeach
                                 </tbody>
                             </table>
+                            <dir-pagination-controls></dir-pagination-controls>
+                            <nav aria-label="Page navigation example">
+                                <form style="float:right ;">
+                                    <select ng-model="pageSize" ng-options="num for num in [5, 10, 15,20]">
+                                    </select>
+                                </form>
+                            </nav>
                         </div>
                     </div>
-                    {!! $users->fragment('foo')->links() !!}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal add -->
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" role="form">
+                        <div class="form-group">
+                            <label for="">Name</label>
+                            <input type="text" name="name" class="form-control" id="" placeholder="Name"
+                                   ng-model="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Email</label>
+                            <input type="email" name="email" class="form-control" id="" placeholder="Email"
+                                   ng-model="email">
+                        </div>
+                        <input type="hidden" ng-model="user.id">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="add_user()">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal edit -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" role="form">
+                        <div class="form-group">
+                            <label for="">Name</label>
+                            <input type="text" name="name" class="form-control" id="" placeholder="Name"
+                                   ng-model="user.name">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Email</label>
+                            <input type="email" name="email" class="form-control" id="" placeholder="Email"
+                                   ng-model="user.email">
+                        </div>
+                        <input type="hidden" ng-model="user.id">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="update(user.id)">Edit</button>
                 </div>
             </div>
         </div>

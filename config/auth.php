@@ -2,6 +2,11 @@
 
 return [
 
+    'api' => [
+        'driver' => 'token',
+        'provider' => 'users',
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Defaults
