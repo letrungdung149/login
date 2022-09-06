@@ -2,10 +2,7 @@
 
 return [
 
-    'api' => [
-        'driver' => 'token',
-        'provider' => 'users',
-    ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -44,6 +41,11 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+        'api' => [
+            'driver' => 'token',
+            'provider' => 'users',
+            'hash' => true,
         ],
     ],
 

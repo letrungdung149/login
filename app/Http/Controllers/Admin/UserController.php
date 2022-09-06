@@ -21,10 +21,9 @@ class UserController extends Controller
         $this->role = $role;
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        $users = User::latest()->search()->paginate($request->get('per_page', 10));
-        return view('admin.users.index', compact('users'));
+        return view('admin.users.index');
     }
 
     public function create()

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="myApp" ng-controller="AppCtrl">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,6 +20,11 @@
     <!-- Theme JS files -->
     <script src="/admin/assets/js/app.js"></script>
     <!-- /theme JS files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular.min.js" integrity="sha512-OboE6z4eMJ4Z58c77mLjwOChLo1ZoGMdBTd2ggt0PyheD8irXxmQBCqZkLPlz/rNC1f9kPsDuHRNuL2HKkm9FA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/angularjs/app.js"></script>
+    <script src="/angularjs/factory.js"></script>
+    <script src="/angularjs/dirPagination.js"></script>
+
 
 </head>
 
@@ -31,29 +36,6 @@
         <a href="index.html" class="d-inline-block">
             <img src="/global_assets/images/logo_light.png" alt="">
         </a>
-    </div>
-
-    <div class="d-flex justify-content-end align-items-center ml-auto">
-        <ul class="navbar-nav flex-row">
-            <li class="nav-item">
-                <a href="#" class="navbar-nav-link">
-                    <i class="icon-lifebuoy"></i>
-                    <span class="d-none d-lg-inline-block ml-2">Support</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="navbar-nav-link">
-                    <i class="icon-user-plus"></i>
-                    <span class="d-none d-lg-inline-block ml-2">Register</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="navbar-nav-link">
-                    <i class="icon-user-lock"></i>
-                    <span class="d-none d-lg-inline-block ml-2">Login</span>
-                </a>
-            </li>
-        </ul>
     </div>
 </div>
 <!-- /main navbar -->
@@ -72,18 +54,7 @@
             <div class="content d-flex justify-content-center align-items-center">
 
                 <!-- Login form -->
-                <form class="login-form" action="{{ route('login') }}" method="post">
-                    {{ csrf_field() }}
-                    @if (session('status'))
-                        <p class="text-danger">Emai hoặc mật khẩu không chính xác!</p>
-                    @endif
-                    @if (count($errors) >0)
-                        <ul>
-                            @foreach($errors->all() as $error)
-                                <li class="text-danger"> {{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    @endif
+                <form class="login-form">
                     <div class="card mb-0">
                         <div class="card-body">
                             <div class="text-center mb-3">
@@ -93,21 +64,21 @@
                             </div>
 
                             <div class="form-group form-group-feedback form-group-feedback-left">
-                                <input type="text" class="form-control" placeholder="Username" name="txtEmail">
+                                <input type="text" class="form-control" placeholder="Email" ng-model="email">
                                 <div class="form-control-feedback">
                                     <i class="icon-user text-muted"></i>
                                 </div>
                             </div>
 
                             <div class="form-group form-group-feedback form-group-feedback-left">
-                                <input type="password" class="form-control" placeholder="Password" name="txtPassword">
+                                <input type="password" class="form-control" placeholder="Password" ng-model="password" >
                                 <div class="form-control-feedback">
                                     <i class="icon-lock2 text-muted"></i>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                                <button type="submit" class="btn btn-primary btn-block" ng-click="login()">Sign in</button>
                             </div>
 
                             <div class="text-center">

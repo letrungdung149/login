@@ -14,9 +14,9 @@ class LoginController extends Controller
     public function login(Request $request){
         $dataCheckLogin = [
             'email'=> $request->email,
-            'password'=>$request->password
+            'password'=>$request->password,
         ];
-        if (Auth::attempt($dataCheckLogin)){
+        if (\auth()->attempt($dataCheckLogin)){
             $token = Str::random(60);
             $request->user()->forceFill([
                 'api_token' => hash('sha256', $token),
@@ -24,7 +24,7 @@ class LoginController extends Controller
             return response()->json([
                 'code' => 200,
                 'message' => 'true',
-                'name' => \auth()->user()->name,
+                'token' => $token,
             ]);
         }else{
             return response()->json([
@@ -35,9 +35,15 @@ class LoginController extends Controller
 
     }
 
+    public function user(Request $request){
+        $request->user();
+    }
+
     public function logout(){
         {
-            Auth::logout();
+            Auth::user()->tokens->each(function($token, $key) {
+                $token->revoke();
+            });
             return response()->json([
                 'code' => 200,
                 'message' => 'logout'

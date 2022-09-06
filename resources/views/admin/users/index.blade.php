@@ -89,7 +89,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Create</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -98,14 +98,19 @@
                     <form action="" role="form">
                         <div class="form-group">
                             <label for="">Name</label>
-                            <input type="text" name="name" class="form-control" id="" placeholder="Name"
+                            <input type="text"  class="form-control" id="" placeholder="Name"
                                    ng-model="name">
                         </div>
                         <div class="form-group">
                             <label for="">Email</label>
-                            <input type="email" name="email" class="form-control" id="" placeholder="Email"
+                            <input type="email"  class="form-control" id="" placeholder="Email"
                                    ng-model="email">
                         </div>
+                        <select class="form-group" aria-label="Default select example" ng-model="display_name" multiple>
+                            <option value="<% role.id %>" ng-repeat="role in roles">
+                                <% role.display_name %>
+                            </option>
+                        </select>
                         <input type="hidden" ng-model="user.id">
                     </form>
                 </div>
@@ -131,14 +136,19 @@
                     <form action="" role="form">
                         <div class="form-group">
                             <label for="">Name</label>
-                            <input type="text" name="name" class="form-control" id="" placeholder="Name"
+                            <input type="text" class="form-control" id="" placeholder="Name"
                                    ng-model="user.name">
                         </div>
                         <div class="form-group">
                             <label for="">Email</label>
-                            <input type="email" name="email" class="form-control" id="" placeholder="Email"
+                            <input type="email" class="form-control" id="" placeholder="Email"
                                    ng-model="user.email">
                         </div>
+                        <select class="form-group" aria-label="Default select example" ng-model="display_namee" multiple>
+                            <option value="<% role.id %>" ng-repeat="role in roles">
+                                <% role.display_name %>
+                            </option>
+                        </select>
                         <input type="hidden" ng-model="user.id">
                     </form>
                 </div>
@@ -150,4 +160,3 @@
         </div>
     </div>
 @endsection
-

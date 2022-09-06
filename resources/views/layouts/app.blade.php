@@ -374,7 +374,7 @@
                data-toggle="dropdown">
                 <img src="/global_assets/images/placeholders/placeholder.jpg" class="rounded-pill mr-lg-2" height="34"
                      alt="">
-                <span class="d-none d-lg-inline-block">{{ Auth::user()->name }}</span>
+{{--                <span class="d-none d-lg-inline-block">{{ Auth::user()->name }}</span>--}}
             </a>
 
             <div class="dropdown-menu dropdown-menu-right">
@@ -384,7 +384,7 @@
                         class="badge badge-primary badge-pill ml-auto">58</span></a>
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item"><i class="icon-cog5"></i> Account settings</a>
-                <a href="{{ route('getLogout') }}" class="dropdown-item"><i class="icon-switch2"></i> Logout</a>
+                <a href="#" class="dropdown-item" ng-click="logout()"><i class="icon-switch2"></i> Logout</a>
             </div>
         </li>
     </ul>
@@ -410,7 +410,7 @@
                         </a>
 
                         <div class="media-body">
-                            <div class="font-weight-semibold">{{ \Illuminate\Support\Facades\Auth::user()->name }}</div>
+{{--                            <div class="font-weight-semibold">{{ \Illuminate\Support\Facades\Auth::user()->name }}</div>--}}
                             <div class="font-size-sm line-height-sm opacity-50">
                                 Senior developer
                             </div>
@@ -442,18 +442,26 @@
                         <div class="text-uppercase font-size-xs line-height-xs">Main</div>
                         <i class="icon-menu" title="Main"></i></li>
                     <li class="nav-item">
-                        <a href="{{ route('users.index') }}" class="nav-link">
+                        <a href="{{ route('user.index') }}" class="nav-link">
                             <i class="icon-user"></i>
                             <span>
-									User
+									Users
 								</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('roles.index') }}" class="nav-link">
-                            <i class="icon-home4"></i>
+                            <i class="icon-pen"></i>
                             <span>
 									Roles
+								</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('permissions.index') }}" class="nav-link">
+                            <i class="icon-home4"></i>
+                            <span>
+									Permissions
 								</span>
                         </a>
                     </li>

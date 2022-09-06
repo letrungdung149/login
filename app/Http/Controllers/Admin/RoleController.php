@@ -65,7 +65,7 @@ class RoleController extends Controller
 
             $roleCreate->permissions()->attach($request->permission);
             return redirect()->route('roles.index')
-                ->with('success', 'Roles updated successfully');
+                ->with('success', 'Roles create successfully');
         }catch (\Exception $e){
             dd($e);
             DB::rollBack();
@@ -75,6 +75,6 @@ class RoleController extends Controller
     public function destroy(Role $role){
         $role->delete();
         return redirect()->route('roles.index')
-            ->with('success', 'Users deleted successfully');
+            ->with('success', 'Roles deleted successfully');
     }
 }

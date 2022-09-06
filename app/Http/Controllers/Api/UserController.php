@@ -2,56 +2,103 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserController
 {
-    public function index(){
+    private $user;
+    private $role;
+
+    public function __construct(User $user, Role $role)
+    {
+        $this->user = $user;
+        $this->role = $role;
+    }
+
+    public function index()
+    {
+        $roles = $this->role->all();
         $users = User::latest()->search()->paginate();
-        return response()->json($users, 200);
+        return response()->json([
+            'code' => 200,
+            'role' => $roles,
+            'user' => $users,
+            'message' => 'success'
+        ]);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'name' => 'required',
             'email' => 'required',
         ]);
-        return User::create($request->all());
-    }
-
-    public function update(Request $request,User $user){
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required',
+        $userCreate = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
         ]);
-
-        return $user->update($request->all());
+        $userCreate->roles()->attach($request->display_name);
+        return response()->json([
+            'code' => 200,
+            'data' => $userCreate,
+            'message' => 'success'
+        ], 200);
     }
 
-    public function destroy(User $user){
+    public function update(Request $request, User $user)
+    {
+        try {
+            $request->validate([
+                'name' => 'required',
+                'email' => 'required',
+            ]);
+
+            $this->user->where('id', $user->id)->update([
+                'name' => $request->name,
+                'email' => $request->email,
+            ]);
+            DB::table('roles_user')->where('user_id', $user->id)->delete();
+            $userCreate = $this->user->find($user->id);
+            $userCreate->roles()->attach($request->display_name);
+            DB::commit();
+            return response()->json([
+                'code' => 200,
+                'message' => 'update success',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+        }
+    }
+
+    public function destroy(User $user)
+    {
         return $user->delete();
     }
-    public function delete($id){
+
+    public function delete($id)
+    {
         $user = User::findOrFail($id);
 
         $user->delete();
-        echo"success delete user";
+        echo "success delete user";
     }
 
     function search($name)
     {
-        $result = User::where('name', 'LIKE', '%'. $name. '%')->get();
-        if(count($result)){
+        $result = User::where('name', 'LIKE', '%' . $name . '%')->get();
+        if (count($result)) {
             return Response()->json([
-                'code'=>'200',
-                'data'=>$result,
-                'message'=>'success'
+                'code' => '200',
+                'data' => $result,
+                'message' => 'success'
             ]);
-        }
-        else
-        {
+        } else {
             return response()->json(['Result' => 'No Data not found'], 404);
         }
     }
