@@ -2,7 +2,13 @@ var app = angular.module('myApp', ['angularUtils.directives.dirPagination'], fun
     $interpolateProvider.startSymbol('<%');
     $interpolateProvider.endSymbol('%>');
 });
-
+app.directive('addUser',function(){
+    return {
+        restrict: 'E',
+        // replace: 'true',
+        templateUrl: 'http://127.0.0.1:8000/api/user123'
+    }
+});
 
 app.controller('AppCtrl', ['$scope', '$http', 'service','$window', appController]);
 
@@ -41,7 +47,7 @@ function appController($scope, $http, service,$window) {
     }
 
     $scope.update = function (id) {
-        $scope.datas = service.update(id,$scope.user,$scope.display_namee);
+        $scope.datas = service.update(id,$scope.user);
     }
 
     $scope.remove_user = function (id) {
@@ -83,7 +89,7 @@ function appController($scope, $http, service,$window) {
         }).then(function (response) {
             if (response.data.message == 'logout') {
                 $window.localStorage.clear();
-                $window.location.href = '/login';
+                $window.location.href = '/';
             }
         }).catch(error => {
             alert(error.data.message);

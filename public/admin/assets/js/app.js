@@ -108,14 +108,14 @@ const App = function () {
         sidebarMainDesktopToggler.on('click', function(e) {
             e.preventDefault();
             sidebarMainElement.toggleClass(sidebarCollapsedClass);
-        });                
+        });
 
         // On mobile
         sidebarMainMobileToggler.on('click', function(e) {
             e.preventDefault();
             sidebarMainElement.toggleClass(sidebarMobileExpandedClass);
             sidebarMainRestElements.removeClass(sidebarMobileExpandedClass);
-        });                
+        });
     };
 
     // Toggle secondary sidebar
@@ -165,7 +165,7 @@ const App = function () {
             e.preventDefault();
             sidebarRightElement.toggleClass(sidebarMobileExpandedClass);
             sidebarRightRestElements.removeClass(sidebarMobileExpandedClass);
-        });                
+        });
     };
 
     // Toggle component sidebar
@@ -290,7 +290,7 @@ const App = function () {
                     to_top_button.removeClass('btn-to-top-visible');
                   };
 
-            scrollableContainer.on('scroll', function() { 
+            scrollableContainer.on('scroll', function() {
                 const scrollpos = scrollableContainer.scrollTop();
                 if (scrollpos >= scrollableDistance) {
                     add_class_on_scroll();
@@ -424,9 +424,9 @@ const App = function () {
     // -------------------------
 
     // Re-declare dropdown boundary for app container
-    const dropdownMenus = function() {
-        $.fn.dropdown.Constructor.Default.boundary = '.page-content';
-    };
+    // const dropdownMenus = function() {
+    //     $.fn.dropdown.Constructor.Default.boundary = '.page-content';
+    // };
 
     // Dropdown submenus. Trigger on click
     const dropdownSubmenu = function() {
@@ -486,7 +486,7 @@ const App = function () {
         },
         // Initialize all components
         initComponents: function() {
-            componentTooltip();
+            // componentTooltip();
             componentPopover();
             componentToTopButton();
             componentHeaderElements();
@@ -517,7 +517,7 @@ const App = function () {
 
         // Dropdown submenu
         initDropdowns: function() {
-            dropdownMenus();
+            // dropdownMenus();
             dropdownSubmenu();
         },
 

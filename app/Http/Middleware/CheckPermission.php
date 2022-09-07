@@ -19,7 +19,6 @@ class CheckPermission
      */
     public function handle(Request $request, Closure $next, $permission = null)
     {
-
         $listRoleOfUser = User::find(auth()->id())->roles()->select('roles.id')->pluck('id')->toArray();
 
         $listRoleOfUser = DB::table('roles')
@@ -32,7 +31,6 @@ class CheckPermission
         $checkPermission = Permission::where('name',$permission)->value('id');
         if ($listRoleOfUser->contains($checkPermission)){
             return $next($request);
-
         }
         return abort(401, 'Unauthorized action.');
 

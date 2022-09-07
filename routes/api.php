@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,12 +21,17 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
+Route::get('user123', function() {
+    return view('admin.users.create');
+});
 
 Route::group([
-    'middleware' => 'api',
+    'middleware' => 'auth:api',
 ], function () {
-    Route::get('search/{name}',[UserController::class,'search']);
-    Route::apiResource('users', UserController::class);
+//    Route::get('users', [UserController::class, 'index']);
+//    Route::post('users', [UserController::class, 'store']);
+//    Route::get('search/{name}',[UserController::class,'search']);
+    Route::apiResource('users', UserController::class)->middleware('check:user-list');
 });
 Route::get('/user', [\App\Http\Controllers\Admin\UserController::class,'index'])->name('user.index');
 Route::post('login', [LoginController::class, 'login']);

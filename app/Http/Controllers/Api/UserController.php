@@ -78,16 +78,15 @@ class UserController
 
     public function destroy(User $user)
     {
-        return $user->delete();
-    }
-
-    public function delete($id)
-    {
-        $user = User::findOrFail($id);
+        $user = User::findOrFail($user->id);
 
         $user->delete();
-        echo "success delete user";
+        return \response()->json([
+            'code'=> 200,
+            'message' => 'success'
+        ]);
     }
+
 
     function search($name)
     {

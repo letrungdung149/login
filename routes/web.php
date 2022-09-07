@@ -17,20 +17,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('add-user', function() {
+//    return view('admin.users.create');
+//});
+
+
 
 Route::prefix('backend')
     ->group(function() {
-        Route::get('/dashboard', [DashboardController::class,'home']);
+//        Route::get('/dashboard', [DashboardController::class,'home']);
 //        Route::get('/user', [UserController::class,'index']);
 //        Route::resource('users', UserController::class);
         Route::resource('roles', RoleController::class);
         Route::resource('permissions', PermissionController::class);
     });
-
-Route::get('/login', [DashboardController::class, 'getLogin'])->name('login');
+Route::get('/', [DashboardController::class, 'getLogin'])->name('login');
 //Route::post('/login', [DashboardController::class, 'postLogin']);
 //Route::get('/logout', [DashboardController::class, 'getLogout'])->name('getLogout');;
 

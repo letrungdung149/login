@@ -20,21 +20,13 @@
 
     <!-- Theme JS files -->
     <script src="/global_assets/js/plugins/visualization/d3/d3.min.js"></script>
-    <script src="/global_assets/js/plugins/visualization/d3/d3_tooltip.js"></script>
     <script src="/global_assets/js/plugins/ui/moment/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="/admin/assets/js/app.js"></script>
     <script src="/global_assets/js/demo_pages/dashboard.js"></script>
     <script src="/global_assets/js/demo_charts/pages/dashboard/light/streamgraph.js"></script>
-    <script src="/global_assets/js/demo_charts/pages/dashboard/light/sparklines.js"></script>
-    <script src="/global_assets/js/demo_charts/pages/dashboard/light/lines.js"></script>
-    <script src="/global_assets/js/demo_charts/pages/dashboard/light/areas.js"></script>
-    <script src="/global_assets/js/demo_charts/pages/dashboard/light/donuts.js"></script>
-    <script src="/global_assets/js/demo_charts/pages/dashboard/light/bars.js"></script>
     <script src="/global_assets/js/demo_charts/pages/dashboard/light/progress.js"></script>
-    <script src="/global_assets/js/demo_charts/pages/dashboard/light/heatmaps.js"></script>
     <script src="/global_assets/js/demo_charts/pages/dashboard/light/pies.js"></script>
-    <script src="/global_assets/js/demo_charts/pages/dashboard/light/bullets.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular.min.js" integrity="sha512-OboE6z4eMJ4Z58c77mLjwOChLo1ZoGMdBTd2ggt0PyheD8irXxmQBCqZkLPlz/rNC1f9kPsDuHRNuL2HKkm9FA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- /theme JS files -->
     <script src="/angularjs/app.js"></script>
