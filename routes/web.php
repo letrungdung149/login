@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
@@ -22,17 +23,17 @@ use Illuminate\Support\Facades\Route;
 //});
 
 
+Route::get('/', [DashboardController::class, 'getLogin'])->name('login');
 
 Route::prefix('backend')
     ->group(function() {
-//        Route::get('/dashboard', [DashboardController::class,'home']);
-//        Route::get('/user', [UserController::class,'index']);
-//        Route::resource('users', UserController::class);
         Route::resource('roles', RoleController::class);
         Route::resource('permissions', PermissionController::class);
-    });
-Route::get('/', [DashboardController::class, 'getLogin'])->name('login');
-//Route::post('/login', [DashboardController::class, 'postLogin']);
-//Route::get('/logout', [DashboardController::class, 'getLogout'])->name('getLogout');;
+        Route::get('/department', [DepartmentController::class,'index'])->name('department.index');
+        Route::get('/user', [UserController::class,'index'])->name('user.index');
+});
+
+
+
 
 

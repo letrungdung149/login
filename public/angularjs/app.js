@@ -2,24 +2,44 @@ var app = angular.module('myApp', ['angularUtils.directives.dirPagination'], fun
     $interpolateProvider.startSymbol('<%');
     $interpolateProvider.endSymbol('%>');
 });
-app.directive('addUser',function(){
+
+
+
+app.controller('AppCtrl', ['$scope', '$http', 'service', '$window', appController])
+    .directive("tree", ['$compile', '$templateCache', function ($compile, $templateCache) {
     return {
-        restrict: 'E',
-        // replace: 'true',
-        templateUrl: 'http://127.0.0.1:8000/api/user123'
+        type: "E",
+        scope: {
+            list: "="
+        },
+        replace: true,
+        link: function (scope, element, attrs) {
+            element.replaceWith($compile($templateCache.get('tree.html'))(scope));
+            scope.delete_department = function (id) {
+                console.log(id);
+            }
+            scope.edit_department = function (id) {
+                for (var i in scope.list) {
+                    if (scope.list[i].id == id) {
+                        scope.department = angular.copy(scope.list[i]);
+                        console.log(scope.department);
+                    }
+                }
+            }
+
+        },
+
+
     }
-});
+}]);
 
-app.controller('AppCtrl', ['$scope', '$http', 'service','$window', appController]);
+function appController($scope, $http, service, $window) {
 
-function appController($scope, $http, service,$window) {
-    $scope.datas = [];
     $scope.pageSize = 5;
-    $scope.roles = [];
     if ($window.localStorage.getItem('token')) {
-        $http.get('http://127.0.0.1:8000/api/users',{
+        $http.get('http://127.0.0.1:8000/api/users', {
             dataType: "json",
-            headers:{
+            headers: {
                 "Content-Type": "application/json",
                 'Authorization': 'Bearer ' + $window.localStorage.getItem('token'),
             }
@@ -35,7 +55,7 @@ function appController($scope, $http, service,$window) {
 
 
     $scope.add_user = function () {
-        $scope.datas = service.add($scope.name, $scope.email, $scope.display_name);
+        $scope.datas = service.user_add($scope.name, $scope.email, $scope.display_name);
     }
 
     $scope.edit_user = function (id) {
@@ -47,21 +67,20 @@ function appController($scope, $http, service,$window) {
     }
 
     $scope.update = function (id) {
-        $scope.datas = service.update(id,$scope.user);
+        $scope.datas = service.user_update(id, $scope.user);
     }
 
     $scope.remove_user = function (id) {
-        $scope.datas = service.delete(id);
+        $scope.datas = service.user_delete(id);
     }
 
 
     $scope.login = function () {
         $http.post('http://127.0.0.1:8000/api/login',
-            {'email': $scope.email, 'password': $scope.password}).then(function (response)
-        {
+            {'email': $scope.email, 'password': $scope.password}).then(function (response) {
             if (response.data.message == 'true') {
                 $window.localStorage.setItem('token', response.data.token);
-                $window.location.href = '/api/user';
+                $window.location.href = '/backend/user';
             } else {
                 alert('fail');
             }
@@ -69,20 +88,11 @@ function appController($scope, $http, service,$window) {
             alert(error.data.message);
         });
     }
-    // function check_login(email,pass){
-    //     for(var i = 0;i < $scope.datas.length;i++){
-    //         console.log($scope.datas[i].password);
-    //         if($scope.datas[i].email == email && $scope.datas[i].password == pass){
-    //              return $scope.datas[i];
-    //         }
 
-    //     }
-    //     return false;
-    // }
     $scope.logout = function () {
-        $http.get('http://127.0.0.1:8000/api/logout',{
+        $http.get('http://127.0.0.1:8000/api/logout', {
             dataType: "json",
-            headers:{
+            headers: {
                 "Content-Type": "application/json",
                 'Authorization': 'Bearer ' + $window.localStorage.getItem('token'),
             }
@@ -96,25 +106,59 @@ function appController($scope, $http, service,$window) {
         });
     }
 
-    // $scope.remove_user = function(id){
-    //     var result = confirm("Are you sure delete this post?");
-    //    if (result) {
-    //       $http({
-    //         url: 'http://127.0.0.1:8000/api/users',
-    //         method: 'POST'
-    //       }).then(function(response){
-    //         $scope.datas.splice(id,1);
-    //       });
-    //     }
-    //   }
+    //department
+    if ($window.localStorage.getItem('token')) {
+        $http.get('http://127.0.0.1:8000/api/departments', {
+            dataType: "json",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': 'Bearer ' + $window.localStorage.getItem('token'),
+            }
+        }).then(function (response) {
+            var createObject = function (json) {
+                return {
+                    id: json.id,
+                    name: json.name,
+                    parent_id: json.parent_id,
+                    description: json.description,
+                    status: json.status,
+                    children: []
+                }
+            };
 
+            var processList = function (temporaryObj) {
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i].parent_id === temporaryObj.id) {
+                        temporaryObj.children.push(processList(createObject(list[i])));
+                    }
+                }
 
-    $scope.search_user = function () {
-        $http.get('http://127.0.0.1:8000/api/search/' + $scope.search).then(function (response) {
-            console.log(response.data);
-        }).catch(error => {
-            alert('không tìm thấy kết quả nào của :' + $scope.search);
+                return temporaryObj;
+
+            };
+
+            var convertList = function () {
+                var temp = [];
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i].parent_id === 0) {
+                        temp.push(processList(createObject(list[i])));
+                    }
+                }
+                return temp;
+
+            };
+            $scope.departments = response.data.data;
+            var list = $scope.departments;
+            $scope.newList = convertList(list);
+        }).catch(function (err) {
+            console.log(err);
         });
+    } else {
+        console.log('error department');
+    }
+
+    $scope.add_department = function () {
+        $scope.departments = service.department_add($scope.name, $scope.description, $scope.parent_id, $scope.status);
     }
 };
 

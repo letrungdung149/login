@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="myApp" ng-controller="AppCtrl">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,11 +32,13 @@
     <script src="/angularjs/app.js"></script>
     <script src="/angularjs/factory.js"></script>
     <script src="/angularjs/dirPagination.js"></script>
-
+    <script src="/angularjs/directive.js"></script>
+    <script src="/angularjs/department.js"></script>
+    @stack('css')
 
 </head>
 
-<body>
+<body ng-app="myApp" ng-controller="AppCtrl">
 
 <!-- Main navbar -->
 <div class="navbar navbar-expand-lg navbar-dark navbar-static">
@@ -454,6 +456,14 @@
                             <i class="icon-home4"></i>
                             <span>
 									Permissions
+								</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('department.index') }}" class="nav-link">
+                            <i class="icon-design"></i>
+                            <span>
+									Department
 								</span>
                         </a>
                     </li>
