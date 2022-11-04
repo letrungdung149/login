@@ -2,10 +2,16 @@
 
 namespace App\Providers;
 
+use App\Events\PostcastProcessed;
+use App\Listeners\SendPostcastNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use App\Events\DemoEvent;
+use App\Listeners\DemoListener;
+use Illuminate\Support\Facades\Log;
+use function Illuminate\Events\queueable;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -18,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        DemoEvent::class => [
+                DemoListener::class
+        ]
     ];
 
     /**
@@ -27,7 +36,13 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+//        Event::listen(
+//            PostcastProcessed::class,
+//            [SendPostcastNotification::class,'handle']
+//        );
+//        Event::listen(queueable(function (PostcastProcessed $event) {
+//            Log::info('hello');
+//        }));
     }
 
     /**

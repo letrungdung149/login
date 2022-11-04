@@ -27,7 +27,6 @@ class CheckPermission
             ->whereIn('roles.id',$listRoleOfUser)
             ->select('permissions.*')
             ->get()->pluck('id')->unique();
-//sử dụng lazy load
         $checkPermission = Permission::where('name',$permission)->value('id');
         if ($listRoleOfUser->contains($checkPermission)){
             return $next($request);

@@ -68,7 +68,7 @@
                 // Now that we have access to the `scope` we can interpolate any expression given in the paginationId attribute and
                 // potentially register a new ID if it evaluates to a different value than the rawId.
                 var paginationId = $parse(attrs.paginationId)(scope) || attrs.paginationId || DEFAULT_ID;
-                
+
                 // (TODO: this seems sound, but I'm reverting as many bug reports followed it's introduction in 0.11.0.
                 // Needs more investigation.)
                 // In case rawId != paginationId we deregister using rawId for the sake of general cleanliness
@@ -108,7 +108,7 @@
 
                 // Delegate to the link function returned by the new compilation of the ng-repeat
                 compiled(scope);
-                 
+
                 // (TODO: Reverting this due to many bug reports in v 0.11.0. Needs investigation as the
                 // principle is sound)
                 // When the scope is destroyed, we make sure to remove the reference to it in paginationService
@@ -197,6 +197,7 @@
             if (attrs.currentPage) {
                 currentPageGetter = $parse(attrs.currentPage);
             } else {
+
                 // If the current-page attribute was not set, we'll make our own.
                 // Replace any non-alphanumeric characters which might confuse
                 // the $parse service and give unexpected results.
@@ -241,7 +242,6 @@
             },
             link: dirPaginationControlsLinkFn
         };
-
         // We need to check the paginationTemplate service to see whether a template path or
         // string has been specified, and add the `template` or `templateUrl` property to
         // the DDO as appropriate. The order of priority to decide which template to use is
@@ -553,7 +553,7 @@
         this.deregisterInstance = function(instanceId) {
             delete instances[instanceId];
         };
-        
+
         this.isRegistered = function(instanceId) {
             return (typeof instances[instanceId] !== 'undefined');
         };

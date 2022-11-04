@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\DepartmentController;
+use App\Http\Controllers\Api\PermissionController;
+use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\TodoListController;
 use App\Http\Controllers\Api\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\DashboardController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -32,8 +34,15 @@ use App\Http\Controllers\Admin\DashboardController;
 Route::group([
     'middleware' => 'auth:api',
 ], function () {
-    Route::apiResource('users', UserController::class)->middleware('check:user-list');
+    Route::apiResource('users', UserController::class);
+    Route::apiResource('departments', DepartmentController::class);
+    Route::apiResource('permissions', PermissionController::class);
+    Route::apiResource('/todo-list',TodoListController::class);
+    Route::apiResource('roles', RoleController::class);
+    Route::get('/todo-list-check/{todo}',[TodoListController::class,'markTodoCompleted']);
+    Route::post('/todo-list-filter',[TodoListController::class,'filter']);
+    Route::post('/todo-list-change',[TodoListController::class,'change']);
 });
-Route::apiResource('departments', DepartmentController::class);
 Route::post('login', [LoginController::class, 'login']);
 Route::get('logout', [LoginController::class, 'logout'])->middleware('auth:api');
+

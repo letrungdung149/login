@@ -32,8 +32,13 @@
     <script src="/angularjs/app.js"></script>
     <script src="/angularjs/factory.js"></script>
     <script src="/angularjs/dirPagination.js"></script>
-    <script src="/angularjs/directive.js"></script>
-    <script src="/angularjs/department.js"></script>
+    <script src="/angularjs/userController.js"></script>
+    <script src="/angularjs/roleController.js"></script>
+    <script src="/angularjs/permissionController.js"></script>
+    <script src="/angularjs/departmentController.js"></script>
+    <script src="/angularjs/departmentService.js"></script>
+    <script src="/angularjs/todoController.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     @stack('css')
 
 </head>
@@ -444,7 +449,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('roles.index') }}" class="nav-link">
+                        <a href="{{ route('role.index') }}" class="nav-link">
                             <i class="icon-pen"></i>
                             <span>
 									Roles
@@ -452,7 +457,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('permissions.index') }}" class="nav-link">
+                        <a href="{{ route('permission.index') }}" class="nav-link">
                             <i class="icon-home4"></i>
                             <span>
 									Permissions
@@ -465,6 +470,14 @@
                             <span>
 									Department
 								</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('todo.index') }}" class="nav-link">
+                            <i class="icon-list"></i>
+                            <span>
+									Todo-List
+                            </span>
                         </a>
                     </li>
                     <!-- /main -->

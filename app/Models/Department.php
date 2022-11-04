@@ -15,6 +15,6 @@ class Department extends Model
         'name',
         'status',
         'description',
-        'parent_id'
+        'root'
     ];
 }

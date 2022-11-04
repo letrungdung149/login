@@ -29,7 +29,6 @@
 </head>
 
 <body>
-
 <!-- Main navbar -->
 <div class="navbar navbar-expand-lg navbar-dark navbar-static">
     <div class="navbar-brand ml-2 ml-lg-0">
@@ -82,7 +81,7 @@
                             </div>
 
                             <div class="text-center">
-                                <a href="login_password_recover.html">Forgot password?</a>
+                                <a href="{{ route('customer.forgetPass') }}">Forgot password?</a>
                             </div>
                         </div>
                     </div>

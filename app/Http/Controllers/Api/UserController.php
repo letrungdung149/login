@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use App\Repositories\User\UserRepository;
 
 class UserController
 {
@@ -24,7 +22,7 @@ class UserController
     public function index()
     {
         $roles = $this->role->all();
-        $users = User::latest()->search()->paginate();
+        $users = $this->user->latest()->search()->paginate();
         return response()->json([
             'code' => 200,
             'role' => $roles,
@@ -39,41 +37,23 @@ class UserController
             'name' => 'required',
             'email' => 'required',
         ]);
-        $userCreate = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-        ]);
-        $userCreate->roles()->attach($request->display_name);
-        return response()->json([
-            'code' => 200,
-            'data' => $userCreate,
-            'message' => 'success'
-        ], 200);
+        $this->userRepository->createUser($request->only([
+            'name',
+            'email'
+        ]));
     }
 
     public function update(Request $request, User $user)
     {
-        try {
             $request->validate([
                 'name' => 'required',
                 'email' => 'required',
             ]);
+            $this->userRepository->updateUser($user,$request->only([
+                'name',
+                'email'
+            ]));
 
-            $this->user->where('id', $user->id)->update([
-                'name' => $request->name,
-                'email' => $request->email,
-            ]);
-            DB::table('roles_user')->where('user_id', $user->id)->delete();
-            $userCreate = $this->user->find($user->id);
-            $userCreate->roles()->attach($request->display_name);
-            DB::commit();
-            return response()->json([
-                'code' => 200,
-                'message' => 'update success',
-            ]);
-        } catch (\Exception $e) {
-            DB::rollBack();
-        }
     }
 
     public function destroy(User $user)
@@ -82,7 +62,7 @@ class UserController
 
         $user->delete();
         return \response()->json([
-            'code'=> 200,
+            'code' => 200,
             'message' => 'success'
         ]);
     }

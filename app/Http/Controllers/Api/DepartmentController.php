@@ -6,17 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\Employee;
 use Illuminate\Http\Request;
+use mysql_xdevapi\Exception;
 
 class DepartmentController extends Controller
 {
     private $department;
-    private $employee;
 
-    public function __construct(Department $department, Employee $employee)
+    public function __construct(Department $department)
     {
         $this->department = $department;
-        $this->employee = $department;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -45,7 +45,7 @@ class DepartmentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -53,26 +53,27 @@ class DepartmentController extends Controller
         $request->validate([
             'name' => 'required',
             'description' => 'required',
-            'status' => 'required',
-            'parent_id' => 'required',
+            'root' => 'required',
         ]);
         $departmentCreate = Department::create([
             'name' => $request->name,
             'description' => $request->description,
-            'parent_id' => $request->parent_id,
-            'status' => $request->status,
+            'root' => $request->root,
+        ]);
+        Department::where('id', $departmentCreate->id)->update([
+            'root' => $request->root . '/' . $departmentCreate->id
         ]);
         return response()->json([
-           'code' => 200,
-           'data' =>  $departmentCreate,
-           'message' => 'success'
+            'code' => 200,
+            'data' => $departmentCreate,
+            'message' => 'success'
         ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -83,7 +84,7 @@ class DepartmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -94,23 +95,40 @@ class DepartmentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Department $department)
     {
-        //
+        try {
+            $this->department->where('id', $department->id)->update([
+                'name' => $request->name,
+                'description' => $request->description,
+                'root' => $request->root,
+            ]);
+            return response()->json([
+                'code' => 200,
+                'message' => 'success'
+            ]);
+        } catch (\Exception $e) {
+            dd($e);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Department $department)
     {
-        //
+        $departments = Department::where("root", 'like', $department->root . '%')->get();
+        $departments->each->delete();
+        return \response()->json([
+            'code' => 200,
+            'message' => 'success'
+        ]);
     }
 }

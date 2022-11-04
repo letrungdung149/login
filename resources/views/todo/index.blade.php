@@ -30,22 +30,45 @@
     </style>
 @endpush
 @section('content')
-    <div class="content" ng-controller="userController">
+    {{ $test }}
+    @foreach(Show::get() as $item)
+        <a href="#">{{ $item['label'] }}</a>
+    @endforeach
+    <div class="content" ng-controller="todoController">
         <div class="card">
-            <div class="card-header"><h5 class="card-title">User</h5></div>
+            <div class="card-header"><h5 class="card-title">Todo-List</h5></div>
             <div class="card-body">
                 <div id="collections-table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                     <div class="row">
-                        <div class="col-sm-8">
+                        <div class="col-sm-4">
                             <div class="dt-buttons btn-group flex-wrap">
-                                <a class="btn btn-success" data-toggle="modal" data-target="#addModal" href="#">
+                                <a class="btn btn-success" href="#" data-toggle="modal" data-target="#addModal">
                                     Create</a>
                             </div>
                         </div>
-                        <div id="collections-table_filter" class="dataTables_filter"><label>Search:<input
-                                    ng-model="search" type="search" class="form-control form-control-sm"
+                        <div class="col-sm-4 dataTables_filter"><label>
+                                <input
+                                    ng-model="search_name"
+                                    ng-change="search_change()"
+                                    type="search" class="form-control form-control-sm"
                                     placeholder="search"
-                                    aria-controls="collections-table"></label></div>
+                                    aria-controls="collections-table">
+                            </label></div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <form method="post" ng-submit="check_status()">
+                                <select name="type" class="form-control form-control-select2"
+                                        ng-model="check"
+                                        data-close-on-select="true"
+                                        data-allow-clear="true">
+                                    <option value="" disabled selected>Select your option</option>
+                                    <option value="0">Pending</option>
+                                    <option value="1">Complete</option>
+                                </select>
+                                    <button type="submit" class="btn btn-primary btn-block" style="margin-top: 5px;">Submit</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div id="collections-table_processing" class="dataTables_processing card"
@@ -59,12 +82,15 @@
                                    style="width: 100%;" aria-describedby="collections-table_info">
                                 <thead>
                                 <tr>
+                                    <th>
+                                        Status
+                                    </th>
                                     <th class="sorting" tabindex="0" aria-controls="collections-table"
-                                        rowspan="1" colspan="1" aria-label="Tiêu đề: Sắp xếp thứ tự tăng dần">
+                                        rowspan="1">
                                         Name
                                     </th>
                                     <th class="sorting_disabled sorting_desc" rowspan="1" colspan="1"
-                                        aria-label="Ảnh">Email
+                                        >Description
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="collections-table"
                                         rowspan="1" colspan="1" aria-label="Ngày tạo: Sắp xếp thứ tự tăng dần">
@@ -75,20 +101,26 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr dir-paginate="u in datas | itemsPerPage:pageSize | filter:search">
-                                    <td><% u.name %></td>
-                                    <td><% u.email %></td>
-                                    <td><% u.created_at %></td>
-                                    <td></td>
-                                    <td class=" dt-center noVis">
+                                <tr dir-paginate="todo in todos | itemsPerPage:pageSize">
+                                    <td>
+                                        <input class="bg-gray-400 text-green-500" type="checkbox" value="<% todo.id %>"
+                                               ng-model="checked"
+                                               ng-init="todo.status != 0 ?  checked=true : ''"
+                                               ng-click="check_complete(todo.id)">
+                                    </td>
+                                    <td><% todo.name %></td>
+                                    <td><% todo.description %></td>
+                                    <td><% todo.created_at %></td>
+                                    <td class="dt-center noVis">
                                         <form action="" class="list-icons" method="post">
                                             <a href="#"
                                                data-toggle="modal" data-target="#editModal"
-                                               ng-click="edit_user(u.id)"
+                                               ng-click="edit_todos(todo.id)"
                                                class="list-icons-item text-primary editor-edit"><i
                                                     class="icon-pencil7"></i></a>
-                                            <a type="submit" ng-click="remove_user(u.id)"
-                                               class="list-icons-item text-danger editor-delete">
+                                            <a type="submit" class="list-icons-item text-danger editor-delete"
+                                               ng-click="delete_todos(todo.id)"
+                                            >
                                                 <i
                                                     class="icon-trash">
                                                 </i>
@@ -100,7 +132,7 @@
                             </table>
                             <dir-pagination-controls></dir-pagination-controls>
                             <nav aria-label="Page navigation example">
-                                <form style="float:right ;">
+                                <form style="float:right;">
                                     <select ng-model="pageSize" ng-options="num for num in [5, 10, 15,20]">
                                     </select>
                                 </form>
@@ -129,21 +161,15 @@
                                        ng-model="name">
                             </div>
                             <div class="form-group">
-                                <label for="">Email</label>
-                                <input type="email" class="form-control" id="" placeholder="Email"
-                                       ng-model="email">
+                                <label for="">Description</label>
+                                <input type="display_name" class="form-control" id="" placeholder="Description"
+                                       ng-model="description">
                             </div>
-                            <select class="form-group" aria-label="Default select example" ng-model="display_name" multiple>
-                                <option value="<% role.id %>" ng-repeat="role in roles">
-                                    <% role.display_name %>
-                                </option>
-                            </select>
-                            <input type="hidden" ng-model="user.id">
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" ng-click="add_user()">Add</button>
+                        <button type="button" class="btn btn-primary" ng-click="add_todos()">Add</button>
                     </div>
                 </div>
             </div>
@@ -164,25 +190,18 @@
                             <div class="form-group">
                                 <label for="">Name</label>
                                 <input type="text" class="form-control" id="" placeholder="Name"
-                                       ng-model="user.name">
+                                       ng-model="todo.name">
                             </div>
                             <div class="form-group">
-                                <label for="">Email</label>
-                                <input type="email" class="form-control" id="" placeholder="Email"
-                                       ng-model="user.email">
+                                <label for="">Description</label>
+                                <input type="text" class="form-control" id="" placeholder="Description"
+                                       ng-model="todo.description">
                             </div>
-                            <select class="form-group" aria-label="Default select example" ng-model="user.display_name"
-                                    multiple>
-                                <option  value="<% role.id %>" ng-repeat="role in roles">
-                                    <% role.display_name %>
-                                </option>
-                            </select>
-                            <input type="hidden" ng-model="user.id">
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" ng-click="update(user.id)">Edit</button>
+                        <button type="button" class="btn btn-primary" ng-click="update_todos(todo.id)">Edit</button>
                     </div>
                 </div>
             </div>
