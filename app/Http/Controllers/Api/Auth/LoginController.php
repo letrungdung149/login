@@ -17,14 +17,11 @@ class LoginController extends Controller
             'password'=>$request->password,
         ];
         if (\auth()->attempt($dataCheckLogin)){
-            $token = Str::random(60);
-            $request->user()->forceFill([
-                'api_token' => hash('sha256', $token),
-            ])->save();
+            $accessToken = $request->user()->createToken('accessToken')->accessToken;
             return response()->json([
                 'code' => 200,
                 'message' => 'true',
-                'token' => $token,
+                'token' => $accessToken,
             ]);
         }else{
             return response()->json([

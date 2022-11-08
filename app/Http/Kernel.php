@@ -23,7 +23,6 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        \App\Http\Middleware\OwnCors::class,
 
     ];
 
@@ -45,7 +44,6 @@ class Kernel extends HttpKernel
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
-            \Fruitcake\Cors\HandleCors::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
@@ -69,6 +67,5 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'check' => CheckPermission::class,
-        'cors' => \Fruitcake\Cors\HandleCors::class,
     ];
 }
