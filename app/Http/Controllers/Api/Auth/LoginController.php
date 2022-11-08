@@ -12,16 +12,20 @@ use Illuminate\Support\Str;
 class LoginController extends Controller
 {
     public function login(Request $request){
+        dd(1);
         $dataCheckLogin = [
             'email'=> $request->email,
             'password'=>$request->password,
         ];
         if (\auth()->attempt($dataCheckLogin)){
-            $accessToken = $request->user()->createToken('accessToken')->accessToken;
+            $token = Str::random(60);
+            $request->user()->forceFill([
+                'api_token' => hash('sha256', $token),
+            ])->save();
             return response()->json([
                 'code' => 200,
                 'message' => 'true',
-                'token' => $accessToken,
+                'token' => $token,
             ]);
         }else{
             return response()->json([

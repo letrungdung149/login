@@ -195,7 +195,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
-        L5Swagger\L5SwaggerServiceProvider::class,
         \App\Providers\NavigationServiceProvider::class,
     ],
 
